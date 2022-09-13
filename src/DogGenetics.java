@@ -18,14 +18,15 @@ public class DogGenetics {
 		dogName + "'s prestigious background right here.");
 		System.out.println("Sir " +dogName+" is:\n");
 		
-		for(int i = 0; i<genesArray.length-1;i++) {
+		for(int i = 0; i<genesArray.length;i++) {
+			if (i==(genesArray.length-1)) {
+				genesArray[i] = totalGenes; // Last remaining genes percentage
+				System.out.println(genesArray[i]+"% " + breedArray[i]);
+				break;
+			}
 			int randomGenes = random.nextInt(totalGenes - 0) + 0;
 			genesArray[i] = randomGenes;
 			totalGenes = totalGenes-randomGenes;
-		}
-		genesArray[genesArray.length-1] = totalGenes; // remaining genes percentage
-		
-		for(int i=0;i<genesArray.length;i++) {
 			System.out.println(genesArray[i]+"% " + breedArray[i]);
 		}
 		System.out.println("\nWow, that's QUITE the dog!");
