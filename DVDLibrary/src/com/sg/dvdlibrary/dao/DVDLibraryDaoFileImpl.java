@@ -49,8 +49,10 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao {
 	}
 
 	@Override
-	public void modifyDvd(String title, DVD dvd) {
+	public void modifyDvd(String title, DVD dvd) throws DVDLibraryDaoException {
+		loadCollection();
 		dvds.put(title, dvd);
+		writeCollection();
 	}
 
 	private DVD unmarshallDvd(String dvdAsText) {
@@ -104,29 +106,27 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao {
 
 		return dvdAsText;
 	}
-	
 
 	private void writeCollection() throws DVDLibraryDaoException {
 
-	    PrintWriter out;
+		PrintWriter out;
 
-	    try {
-	        out = new PrintWriter(new FileWriter(COLLECTION_FILE));
-	    } catch (IOException e) {
-	        throw new DVDLibraryDaoException(
-	                "Could not save DVD data.", e);
-	    }
+		try {
+			out = new PrintWriter(new FileWriter(COLLECTION_FILE));
+		} catch (IOException e) {
+			throw new DVDLibraryDaoException("Could not save DVD data.", e);
+		}
 
-	    String dvdAsText;
-	    
-	    List<DVD> dvdList = this.getAllDvds();
-	    for (DVD currentDvd : dvdList) {
-	       
-	    	dvdAsText = marshallDvd(currentDvd);      
-	        out.println(dvdAsText);
-	        out.flush();
-	    }
-	    out.close();
+		String dvdAsText;
+
+		List<DVD> dvdList = new ArrayList<DVD>(dvds.values());
+		for (DVD currentDvd : dvdList) {
+
+			dvdAsText = marshallDvd(currentDvd);
+			out.println(dvdAsText);
+			out.flush();
+		}
+		out.close();
 	}
 
 }
